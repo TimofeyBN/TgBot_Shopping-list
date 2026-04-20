@@ -1,5 +1,5 @@
 PATH
-  remote: ../../Shopping-list-manager
+  remote: Shopping-list-manager
   specs:
     shopping_list_manager (0.1.0)
       json
