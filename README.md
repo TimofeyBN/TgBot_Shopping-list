@@ -102,7 +102,7 @@ README.md
 
 ---
 
-## 🛠 Технологии
+## Технологии
 
 * Ruby
 * telegram-bot-ruby
@@ -128,13 +128,27 @@ README.md
 → К оплате: 71.2
 ```
 
+## Тестирование
+
+Запуск тестов:
+
+```bash
+bundle exec rspec
+```
+
 ---
+
+## Зависимость
+
+Ссылка на используемый гем:
+
+https://github.com/TimofeyBN/Shopping-list-manager
+
 
 ## Лицензия
 
 MIT
 
----
 
 ## Авторы
 
