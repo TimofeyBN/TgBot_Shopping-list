@@ -5,7 +5,7 @@ module Bot
   class Commands
     def self.handle(bot, message)
       return if message.text.nil? || message.text.empty?
-      text = message.text
+      text = message.text.to_s
 
       case text
       when '/start', '/help'
@@ -89,17 +89,23 @@ end
 
     # --- CLI RUNNER ---
     def self.run_cli(bot, message, args)
-      user_id = message.from&.id || message.chat.id
-      file = "data_#{user_id}.json"
+      begin
+        user_id = message.from&.id || message.chat.id
+        file = "data_#{user_id}.json"
 
-      full_args = args.dup + ['--file', file]
+        full_args = args.dup + ['--file', file]
 
-      output = capture_stdout do
-        ShoppingListManager::CLI.run(full_args)
+        output = capture_stdout do
+          ShoppingListManager::CLI.run(full_args)
+        end
+
+        send(bot, message, output.empty? ? "Готово ✅" : output)
+
+      rescue => e
+        send(bot, message, "Ошибка: #{e.message}")
       end
-
-      send(bot, message, output.empty? ? "Готово ✅" : output)
     end
+
 
 
     # --- UTILS ---
