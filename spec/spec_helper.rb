@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'rspec'
 require 'telegram/bot'
 require_relative '../lib/bot/commands'

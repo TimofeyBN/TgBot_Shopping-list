@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'spec_helper'
 require_relative '../../lib/bot/commands'
 
@@ -18,7 +20,7 @@ RSpec.describe Bot::Commands do
     let(:text) { '/start' }
 
     it 'отправляет приветственное сообщение' do
-      expect(api).to receive(:send_message).with(chat_id: 123,text: /Я бот для списка покупок/i)
+      expect(api).to receive(:send_message).with(chat_id: 123, text: /Я бот для списка покупок/i)
       described_class.handle(bot, message)
     end
   end
@@ -59,7 +61,7 @@ RSpec.describe Bot::Commands do
     let(:text) { '/buy 1' }
 
     it 'вызывает run_cli с buy' do
-      expect(described_class).to receive(:run_cli).with(bot, message, ['buy', '1'])
+      expect(described_class).to receive(:run_cli).with(bot, message, %w[buy 1])
       described_class.handle(bot, message)
     end
   end
@@ -68,7 +70,7 @@ RSpec.describe Bot::Commands do
     let(:text) { '/delete 1' }
 
     it 'вызывает run_cli с delete' do
-      expect(described_class).to receive(:run_cli).with(bot, message, ['delete', '1'])
+      expect(described_class).to receive(:run_cli).with(bot, message, %w[delete 1])
       described_class.handle(bot, message)
     end
   end
@@ -98,8 +100,4 @@ RSpec.describe Bot::Commands do
       expect { described_class.handle(bot, message) }.not_to raise_error
     end
   end
-
-
-
-
 end

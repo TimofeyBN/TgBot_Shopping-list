@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'shopping_list_manager'
 require 'stringio'
 
@@ -5,26 +7,27 @@ module Bot
   class Commands
     def self.handle(bot, message)
       return if message.text.nil? || message.text.empty?
+
       text = message.text.to_s
 
       case text
       when '/start', '/help'
-          help_text = <<~HELP
-            Я бот для списка покупок
+        help_text = <<~HELP
+          Я бот для списка покупок
 
-            /add Название количество цена – добавить товар
-            /list – показать список
-            /buy ID – отметить купленным
-            /delete ID – удалить
-            /total – общая стоимость
-            /help – эта справка
+          /add Название количество цена – добавить товар
+          /list – показать список
+          /buy ID – отметить купленным
+          /delete ID – удалить
+          /total – общая стоимость
+          /help – эта справка
 
-            Пример:
-            /add Хлеб 1 45.50
-            /list
-            /buy 1
-          HELP
-          send(bot, message, help_text)
+          Пример:
+          /add Хлеб 1 45.50
+          /list
+          /buy 1
+        HELP
+        send(bot, message, help_text)
 
       when %r{^/add}
         handle_add(bot, message)
@@ -35,7 +38,7 @@ module Bot
       when %r{^/buy}
         id = message.text.split[1]
         if id.nil? || id !~ /^\d+$/
-          send(bot, message, "Укажите ID товара: /buy 2")
+          send(bot, message, 'Укажите ID товара: /buy 2')
         else
           run_cli(bot, message, ['buy', id])
         end
@@ -43,7 +46,7 @@ module Bot
       when %r{^/delete}
         id = message.text.split[1]
         if id.nil? || id !~ /^\d+$/
-          send(bot, message, "Укажите ID товара: /delete 3")
+          send(bot, message, 'Укажите ID товара: /delete 3')
         else
           run_cli(bot, message, ['delete', id])
         end
@@ -53,7 +56,7 @@ module Bot
 
 
       else
-        send(bot, message, "Неизвестная команда")
+        send(bot, message, 'Неизвестная команда')
       end
     end
 
@@ -90,34 +93,29 @@ module Bot
 
       # Валидация чисел
       unless quantity_str =~ /\A\d+\z/ && price_str =~ /\A\d+(\.\d+)?\z/
-        send(bot, message, "Ошибка: количество должно быть целым числом, цена — числом (например, 2 и 45.99)")
+        send(bot, message, 'Ошибка: количество должно быть целым числом, цена — числом (например, 2 и 45.99)')
         return
       end
 
-  args = ['add', name, '--quantity', quantity_str, '--price', price_str]
-  run_cli(bot, message, args)
-end
+      args = ['add', name, '--quantity', quantity_str, '--price', price_str]
+      run_cli(bot, message, args)
+    end
 
     # --- CLI RUNNER ---
     def self.run_cli(bot, message, args)
-      begin
-        user_id = message.from&.id || message.chat.id
-        file = "data_#{user_id}.json"
+      user_id = message.from&.id || message.chat.id
+      file = "data_#{user_id}.json"
 
-        full_args = args.dup + ['--file', file]
+      full_args = args.dup + ['--file', file]
 
-        output = capture_stdout do
-          ShoppingListManager::CLI.run(full_args)
-        end
-
-        send(bot, message, output.empty? ? "Готово ✅" : output)
-
-      rescue => e
-        send(bot, message, "Ошибка: #{e.message}")
+      output = capture_stdout do
+        ShoppingListManager::CLI.run(full_args)
       end
+
+      send(bot, message, output.empty? ? 'Готово ✅' : output)
+    rescue StandardError => e
+      send(bot, message, "Ошибка: #{e.message}")
     end
-
-
 
     # --- UTILS ---
     def self.send(bot, message, text)
@@ -132,7 +130,5 @@ end
     ensure
       $stdout = old_stdout
     end
-
-
   end
 end
