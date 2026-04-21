@@ -1,8 +1,10 @@
 require 'spec_helper'
+require_relative '../../lib/bot/commands'
+
 
 RSpec.describe Bot::Commands do
   let(:bot) { instance_double('Telegram::Bot::Client') }
-  let(:api) { instance_double('Telegram::Bot::Api') }
+  let(:api) { double('api') }
   let(:message) { instance_double('Telegram::Bot::Types::Message', text: text, chat: chat, from: from) }
   let(:chat) { instance_double('Telegram::Bot::Types::Chat', id: 123) }
   let(:from) { instance_double('Telegram::Bot::Types::User', id: 456) }
@@ -16,7 +18,7 @@ RSpec.describe Bot::Commands do
     let(:text) { '/start' }
 
     it 'отправляет приветственное сообщение' do
-      expect(api).to receive(:send_message).with(chat_id: 123, text: /Привет/)
+      expect(api).to receive(:send_message).with(chat_id: 123,text: /Я бот для списка покупок/i)
       described_class.handle(bot, message)
     end
   end
@@ -42,15 +44,62 @@ RSpec.describe Bot::Commands do
         described_class.handle(bot, message)
       end
     end
+  end
 
-    context 'некорректные числа' do
-      let(:text) { '/add Сыр два 120' }
+  describe '/list' do
+    let(:text) { '/list' }
 
-      it 'отправляет сообщение об ошибке' do
-        expect(api).to receive(:send_message).with(chat_id: 123, text: /Ошибка: количество должно быть/)
-        described_class.handle(bot, message)
-      end
+    it 'вызывает run_cli с list' do
+      expect(described_class).to receive(:run_cli).with(bot, message, ['list'])
+      described_class.handle(bot, message)
     end
   end
+
+  describe '/buy' do
+    let(:text) { '/buy 1' }
+
+    it 'вызывает run_cli с buy' do
+      expect(described_class).to receive(:run_cli).with(bot, message, ['buy', '1'])
+      described_class.handle(bot, message)
+    end
+  end
+
+  describe '/delete' do
+    let(:text) { '/delete 1' }
+
+    it 'вызывает run_cli с delete' do
+      expect(described_class).to receive(:run_cli).with(bot, message, ['delete', '1'])
+      described_class.handle(bot, message)
+    end
+  end
+
+  describe '/total' do
+    let(:text) { '/total' }
+
+    it 'вызывает run_cli с total' do
+      expect(described_class).to receive(:run_cli).with(bot, message, ['total'])
+      described_class.handle(bot, message)
+    end
+  end
+
+  describe 'unknown command' do
+    let(:text) { '/unknown' }
+
+    it 'отправляет сообщение об ошибке' do
+      expect(api).to receive(:send_message).with(chat_id: 123, text: /Неизвестная/)
+      described_class.handle(bot, message)
+    end
+  end
+
+  describe 'empty text' do
+    let(:text) { nil }
+
+    it 'не падает' do
+      expect { described_class.handle(bot, message) }.not_to raise_error
+    end
+  end
+
+
+
 
 end

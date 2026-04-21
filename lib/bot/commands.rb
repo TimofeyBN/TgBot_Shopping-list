@@ -57,6 +57,17 @@ module Bot
       end
     end
 
+    def self.main_keyboard
+      Telegram::Bot::Types::ReplyKeyboardMarkup.new(
+        keyboard: [
+          ['📋 Список', '➕ Добавить'],
+          ['💰 Итог', '❌ Удалить'],
+          ['✅ Купить']
+        ],
+        resize_keyboard: true
+      )
+    end
+
     # --- ADD ---
     def self.handle_add(bot, message)
       # Удаляем команду /add и лишние пробелы
