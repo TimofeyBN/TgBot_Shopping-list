@@ -60,23 +60,12 @@ module Bot
       end
     end
 
-    def self.main_keyboard
-      Telegram::Bot::Types::ReplyKeyboardMarkup.new(
-        keyboard: [
-          ['📋 Список', '➕ Добавить'],
-          ['💰 Итог', '❌ Удалить'],
-          ['✅ Купить']
-        ],
-        resize_keyboard: true
-      )
-    end
+    
 
-    # --- ADD ---
+    
     def self.handle_add(bot, message)
-      # Удаляем команду /add и лишние пробелы
       text = message.text.sub(%r{^/add\s*}, '')
 
-      # Ищем два последних аргумента как числа (количество и цена)
       parts = text.split
 
       if parts.size < 3
@@ -84,14 +73,11 @@ module Bot
         return
       end
 
-      # Последние два элемента – количество и цена
       price_str = parts.pop
       quantity_str = parts.pop
 
-      # Оставшиеся части – название (может быть из нескольких слов)
       name = parts.join(' ')
 
-      # Валидация чисел
       unless quantity_str =~ /\A\d+\z/ && price_str =~ /\A\d+(\.\d+)?\z/
         send(bot, message, 'Ошибка: количество должно быть целым числом, цена — числом (например, 2 и 45.99)')
         return
@@ -101,7 +87,8 @@ module Bot
       run_cli(bot, message, args)
     end
 
-    # --- CLI RUNNER ---
+
+
     def self.run_cli(bot, message, args)
       user_id = message.from&.id || message.chat.id
       file = "data_#{user_id}.json"
@@ -117,7 +104,8 @@ module Bot
       send(bot, message, "Ошибка: #{e.message}")
     end
 
-    # --- UTILS ---
+
+
     def self.send(bot, message, text)
       bot.api.send_message(chat_id: message.chat.id, text: text)
     end
