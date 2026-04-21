@@ -1,5 +1,6 @@
-PATH
-  remote: Shopping-list-manager
+GIT
+  remote: https://github.com/TimofeyBN/Shopping-list-manager.git
+  revision: 9d4edb927ca893403ee282a5aabd34d11239340a
   specs:
     shopping_list_manager (0.1.0)
       json
