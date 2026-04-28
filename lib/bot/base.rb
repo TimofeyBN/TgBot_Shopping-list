@@ -23,7 +23,8 @@ module Bot
 
       def run_cli(args)
         user_id  = @message.from&.id || @message.chat.id
-        file     = "data_#{user_id}.json"
+        Dir.mkdir('data') unless Dir.exist?('data')
+        file     = "data/data_#{user_id}.json"
         full_args = args + ['--file', file]
 
         output = capture_stdout { ShoppingListManager::CLI.run(full_args) }

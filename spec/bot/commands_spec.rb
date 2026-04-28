@@ -32,7 +32,7 @@ RSpec.describe Bot::Commands do
 
       it 'вызывает CLI с правильными аргументами' do
         expect(ShoppingListManager::CLI).to receive(:run).with(
-          ['add', 'Молоко', '--quantity', '2', '--price', '89.90', '--file', 'data_456.json']
+          ['add', 'Молоко', '--quantity', '2', '--price', '89.90', '--file', 'data/data_456.json']
         )
         described_class.handle(bot, message)
       end
@@ -67,7 +67,7 @@ RSpec.describe Bot::Commands do
 
     it 'вызывает CLI с аргументом list' do
       expect(ShoppingListManager::CLI).to receive(:run).with(
-        ['list', '--file', 'data_456.json']
+        ['list', '--file', 'data/data_456.json']
       )
       described_class.handle(bot, message)
     end
@@ -79,7 +79,7 @@ RSpec.describe Bot::Commands do
 
       it 'вызывает CLI с аргументом buy и ID' do
         expect(ShoppingListManager::CLI).to receive(:run).with(
-          ['buy', '1', '--file', 'data_456.json']
+          ['buy', '1', '--file', 'data/data_456.json']
         )
         described_class.handle(bot, message)
       end
@@ -89,7 +89,7 @@ RSpec.describe Bot::Commands do
       let(:text) { '/buy' }
 
       it 'отправляет подсказку об использовании' do
-        expect(api).to receive(:send_message).with(chat_id: 123, text: /\/buy \d/)
+        expect(api).to receive(:send_message).with(chat_id: 123, text: %r{/buy \d})
         described_class.handle(bot, message)
       end
     end
@@ -101,7 +101,7 @@ RSpec.describe Bot::Commands do
 
       it 'вызывает CLI с аргументом delete и ID' do
         expect(ShoppingListManager::CLI).to receive(:run).with(
-          ['delete', '3', '--file', 'data_456.json']
+          ['delete', '3', '--file', 'data/data_456.json']
         )
         described_class.handle(bot, message)
       end
@@ -111,7 +111,7 @@ RSpec.describe Bot::Commands do
       let(:text) { '/delete' }
 
       it 'отправляет подсказку об использовании' do
-        expect(api).to receive(:send_message).with(chat_id: 123, text: /\/delete \d/)
+        expect(api).to receive(:send_message).with(chat_id: 123, text: %r{/delete \d})
         described_class.handle(bot, message)
       end
     end
@@ -122,7 +122,7 @@ RSpec.describe Bot::Commands do
 
     it 'вызывает CLI с аргументом total' do
       expect(ShoppingListManager::CLI).to receive(:run).with(
-        ['total', '--file', 'data_456.json']
+        ['total', '--file', 'data/data_456.json']
       )
       described_class.handle(bot, message)
     end

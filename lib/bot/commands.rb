@@ -12,11 +12,11 @@ module Bot
   module Commands
     ROUTES = {
       %r{^/(start|help)$} => Start,
-      %r{^/add}           => Add,
-      %r{^/list$}         => List,
-      %r{^/buy}           => Buy,
-      %r{^/delete}        => Delete,
-      %r{^/total$}        => Total,
+      %r{^/add} => Add,
+      %r{^/list$} => List,
+      %r{^/buy} => Buy,
+      %r{^/delete} => Delete,
+      %r{^/total$} => Total
     }.freeze
 
     def self.handle(bot, message)
