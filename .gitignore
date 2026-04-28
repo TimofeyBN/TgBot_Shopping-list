@@ -17,7 +17,9 @@
 .byebug_history
 
 # data files
+data/*
 *.json
+
 
 ## Specific to RubyMotion:
 .dat*

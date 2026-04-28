@@ -91,7 +91,9 @@ module Bot
 
     def self.run_cli(bot, message, args)
       user_id = message.from&.id || message.chat.id
-      file = "data_#{user_id}.json"
+      
+      Dir.mkdir('data') unless Dir.exist?('data')
+      file = "data/data_#{user_id}.json"
 
       full_args = args.dup + ['--file', file]
 
