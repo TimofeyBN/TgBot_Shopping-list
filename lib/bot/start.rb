@@ -4,23 +4,22 @@ module Bot
   module Commands
     class Start < Base
       HELP_TEXT = <<~HELP
-        Я бот для списка покупок
+        👋 Привет! Я бот для списка покупок.
+
+        Используй кнопки внизу или команды:
 
         /add Название количество цена – добавить товар
         /list – показать список
         /buy ID – отметить купленным
         /delete ID – удалить
         /total – общая стоимость
-        /help – эта справка
 
-        Пример:
+        📌 Пример:
         /add Хлеб 1 45.50
-        /list
-        /buy 1
       HELP
 
       def handle
-        send_message(HELP_TEXT)
+        send_message(HELP_TEXT, reply_markup: main_keyboard)
       end
     end
   end

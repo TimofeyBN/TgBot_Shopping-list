@@ -3,12 +3,26 @@
 module Bot
   module Commands
     class Add < Base
+      FORMAT_HINT = <<~HINT
+        ➕ *Добавление товара*
+
+        Формат: `/add Название количество цена`
+
+        Примеры:
+        `/add Хлеб 1 45.90`
+        `/add Молоко цельное 2 89`
+      HINT
+
       def handle
-        text  = @message.text.sub(%r{^/add\s*}, '')
+        # Убираем и slash-команду и текст кнопки (без слеша)
+        text = @message.text
+                       .sub(/\A\/add\s*/i, '')
+                       .sub(/\A➕\s*Добавить товар\s*/i, '')
+                       .strip
         parts = text.split
 
         if parts.size < 3
-          send_message("Формат: /add Название количество цена\nПример: /add Хлеб 1 45.90")
+          send_message(FORMAT_HINT, parse_mode: 'Markdown')
           return
         end
 
@@ -17,7 +31,7 @@ module Bot
         name         = parts.join(' ')
 
         unless quantity_str =~ /\A\d+\z/ && price_str =~ /\A\d+(\.\d+)?\z/
-          send_message('Ошибка: количество должно быть целым числом, цена — числом (например, 2 и 45.99)')
+          send_message('❌ Количество — целое число, цена — число (например: 2 и 45.99)')
           return
         end
 
