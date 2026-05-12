@@ -25,7 +25,7 @@ module Bot
           reply_markup: reply_markup
         }
         params[:parse_mode] = parse_mode if parse_mode
-        @bot.api.send_message(**params)
+        @bot.api.send_message(params)
       end
 
       # Постоянная reply-клавиатура внизу экрана
